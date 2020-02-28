@@ -1,4 +1,4 @@
-# G_call_generator
+# G_cal_generator
 
 ### O co se jedná? 
 Úkolem tohoto projektu je vytvořit aplikaci, která umožní uživateli přístup k jeho Google kalendáři a bude moci přidávat, mazat a upravovat jednotlivé události v kalendáři. **Nutný výzkum, co z uvedeného bude možné provést**
