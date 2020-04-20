@@ -1,21 +1,18 @@
-# Google calendar generator
+# PyQT Google Kalendář
+> Školní, seminární práce k předmětu GUI.
 
-### O co se jedná? 
-Úkolem tohoto projektu je vytvořit aplikaci, která umožní uživateli přístup k jeho Google kalendáři a bude moci přidávat, mazat a upravovat jednotlivé události v kalendáři. **Nutný výzkum, co z uvedeného bude možné provést**
+## Informace
+Add more general information about project.
 
-### Alternativní / bonusové funkce
-Import / export v .ical formátu.
+## Screenshot
+![Example screenshot](./img/screenshot.png)
 
-### Odkazy
-[PyQT tutorial](https://realpython.com/python-pyqt-gui-calculator/)
+## Použité Technologie
+* Python 3.6.9
 
-[PyQT video tutorial](https://www.youtube.com/watch?v=tZNnXL7cW6o&list=PL3JVwFmb_BnRpvOeIh_To4YSiebiggyXS&index=1)
+## Funkce
 
-[PyQT dokumentace](https://doc.qt.io/qtforpython/tutorials/index.html)
 
-### Výzkum
-
-[Accessing google calendar events](https://towardsdatascience.com/accessing-google-calendar-events-data-using-python-e915599d3ae2)
-
-[Google calendar API](https://developers.google.com/calendar)
-
+## Autoři
+* Jan Korndorfer
+* Frederik Fako
