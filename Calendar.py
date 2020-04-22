@@ -16,21 +16,20 @@ class Calendar(QObject):
         return date
 
     printedDate = pyqtSignal(str, arguments=['printDate'])
+    loadedDate = pyqtSignal(str, arguments=['loadedDate'])
+    loadedCredentials = pyqtSignal(str, arguments=['loadedCredentials'])
 
     @pyqtSlot(str)
     def printDate(self, date):
         date = self.formatDate(date)
         self.printedDate.emit(date)
 
-    loadedDate = pyqtSignal(str, arguments=['loadedDate'])
-
     @pyqtSlot(str)
     def loadDate(self, text):
         today = datetime.today()
         today = today.strftime("%A %d")
+        print(self.googleAPI.get_my_events(today))
         self.loadedDate.emit(today)
-
-    loadedCredentials = pyqtSignal(str, arguments=['loadedCredentials'])
 
     @pyqtSlot(str)
     def loadCredentials(self, text):
