@@ -2,6 +2,7 @@ from API.GoogleCalAPI import GoogleCalAPI
 
 API = GoogleCalAPI()
 
-my_calendars = API.get_my_events()
+test = API.create_event('20-01-2020', 'testuju', 1, 'hours', ['test','jeb'],'test@gmail.com',
+                        'hele zkouším')
 
-print(my_calendars)
+print(test)

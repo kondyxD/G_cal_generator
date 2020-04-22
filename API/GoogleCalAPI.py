@@ -61,26 +61,32 @@ class GoogleCalAPI():
             start = event['start'].get('dateTime', event['start'].get('date'))
             return {start, event['summary']}
 
-    def create_event(self, start_time_str, summary, calendar_id='primary', duration=1, unit='days', attendees=None,
+    def create_event(self, start_time_str, summary, duration=1, unit='days', attendees=None,
                      description=None, location=None):
 
         interval = Utils.dateFunctions.getDateInterval(start_time_str, duration, unit)
+
+        emails = []
+        if attendees is not None & isinstance(attendees, list):
+            for email in attendees:
+                emails.append({'email': email})
 
         event = {
             'summary': summary,
             'location': location,
             'description': description,
             'start': {
-                'dateTime': interval.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                'timeZone': datetime.timezone,
+                'dateTime': interval['start_time'],
+                'timeZone': Utils.dateFunctions.getSystemTimeZone(),
             },
             'end': {
-                'dateTime': interval.end_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                'timeZone': datetime.timezone,
+                'dateTime': interval['end_time'],
+                'timeZone': Utils.dateFunctions.getSystemTimeZone(),
             },
-            'attendees': [
-                {'email': attendees},
+            'recurrence': [
+                'RRULE:FREQ=DAILY;COUNT=2'
             ],
+            'attendees': emails,
             'reminders': {
                 'useDefault': False,
                 'overrides': [
@@ -90,4 +96,5 @@ class GoogleCalAPI():
             },
         }
 
-        self.service.events().insert(calendar_id, body=event, sendNotifications=True).execute()
+        event = self.service.events().insert(calendarId='primary', body=event).execute()
+        print('Event created: %s' % (event.get('htmlLink')))

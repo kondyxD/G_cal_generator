@@ -1,5 +1,6 @@
 import datefinder
 import datetime
+import time
 
 
 def getDateFromString(date_string):
@@ -17,8 +18,6 @@ def getDateInterval(start_date_str='now', duration=1, unit='days'):
         kwargs = {unit: duration}
     else:
         kwargs = {'days': duration}
-
-    print(kwargs, unit, duration)
 
     if start_date_str == 'now':
         return {'start_time': getISONowUTC(), 'end_time': dateToIso((getNow() + datetime.timedelta(**kwargs)))}
@@ -41,3 +40,7 @@ def getISONowUTC():
 
 def getNow():
     return datetime.datetime.now()
+
+
+def getSystemTimeZone():
+    return 'Europe/Prague'
