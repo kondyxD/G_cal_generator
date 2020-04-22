@@ -10,7 +10,7 @@ from google.auth.transport.requests import Request
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 
-class GoogleCalAPI:
+class GoogleCalAPI():
     def __init__(self):
         if os.path.exists('../token.pickle'):
             with open('../token.pickle', 'rb') as token:
