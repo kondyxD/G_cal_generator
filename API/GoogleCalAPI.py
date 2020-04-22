@@ -12,6 +12,8 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 class GoogleCalAPI():
     def __init__(self):
+        creds = None
+        self.calendarId = None
         if os.path.exists('../token.pickle'):
             with open('../token.pickle', 'rb') as token:
                 creds = pickle.load(token)
@@ -21,7 +23,7 @@ class GoogleCalAPI():
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    '../Credentials/credentials.json', SCOPES)
+                    'C:/Users/Fredi/PycharmProjects/UJEP-Google/G_cal_generator/Credentials/credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('../token.pickle', 'wb') as token:
@@ -29,40 +31,52 @@ class GoogleCalAPI():
 
         self.service = build('calendar', 'v3', credentials=creds)
 
+        self.calendar_list_entry = self.service.calendarList().get(calendarId='primary').execute()
+
+        if not self.calendar_list_entry['accessRole']:
+            print('API can\' connect!')
+
+    def get_calendar_list_entry(self):
+        return self.calendar_list_entry
+
     def get_my_calendars(self):
-        return self.service.calendarList().list().execute
+        result = self.service.calendarList().list().execute()['items'][0]
+        self.calendarId = result['id']
+        return result
 
-    def get_my_calendars_events(self, calendar_id):
-        return self.service.events().list(calendarId=calendar_id, timeZone="Asia/Kolkata").execute()
+    def get_my_events(self):
+        return self.service.events().list(calendarId=self.calendarId, timeZone="Europe/Prague").execute()['items'][0]
 
-    def create_event(self, start_time_str, summary, calendar_id = 'primary', duration=1, attendees=None, description=None, location=None):
-        matches = list(datefinder.find_dates(start_time_str))
-        if len(matches):
-            start_time = matches[0]
-            end_time = start_time + datetime.timedelta(hours=duration)
 
-        event = {
-            'summary': summary,
-            'location': location,
-            'description': description,
-            'start': {
-                'dateTime': start_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                'timeZone': datetime.timezone,
-            },
-            'end': {
-                'dateTime': end_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                'timeZone': datetime.timezone,
-            },
-            'attendees': [
-                {'email': attendees},
-            ],
-            'reminders': {
-                'useDefault': False,
-                'overrides': [
-                    {'method': 'email', 'minutes': 24 * 60},
-                    {'method': 'popup', 'minutes': 10},
-                ],
-            },
-        }
+   #def create_event(self, start_time_str, summary, calendar_id='primary', duration=1, attendees=None, description=None,
+   #                 location=None):
+   #    matches = list(datefinder.find_dates(start_time_str))
+   #    if len(matches):
+   #        start_time = matches[0]
+   #        end_time = start_time + datetime.timedelta(hours=duration)
 
-        return self.service.events().insert(calendar_id, body=event, sendNotifications=True).execute()
+   #    event = {
+   #        'summary': summary,
+   #        'location': location,
+   #        'description': description,
+   #        'start': {
+   #            'dateTime': start_time.strftime("%Y-%m-%dT%H:%M:%S"),
+   #            'timeZone': datetime.timezone,
+   #        },
+   #        'end': {
+   #            'dateTime': end_time.strftime("%Y-%m-%dT%H:%M:%S"),
+   #            'timeZone': datetime.timezone,
+   #        },
+   #        'attendees': [
+   #            {'email': attendees},
+   #        ],
+   #        'reminders': {
+   #            'useDefault': False,
+   #            'overrides': [
+   #                {'method': 'email', 'minutes': 24 * 60},
+   #                {'method': 'popup', 'minutes': 10},
+   #            ],
+   #        },
+   #    }
+
+   #self.service.events().insert(calendar_id, body=event, sendNotifications=True).execute()
