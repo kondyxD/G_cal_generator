@@ -3,6 +3,7 @@ import datetime
 import pickle
 import os.path
 import datefinder
+import Utils.dateFunctions
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -43,38 +44,50 @@ class GoogleCalAPI():
         self.calendarId = result['id']
         return result
 
-    def get_my_events(self):
-        return self.service.events().list(calendarId=self.calendarId, timeZone="Europe/Prague").execute()['items'][0]
+    def get_my_events(self, date=None):
+        if date is None:
+            date = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+        else:
+            date = Utils.dateFunctions.getDateFromString(date)
 
-   #def create_event(self, start_time_str, summary, calendar_id='primary', duration=1, attendees=None, description=None,
-   #                 location=None):
-   #    matches = list(datefinder.find_dates(start_time_str))
-   #    if len(matches):
-   #        start_time = matches[0]
-   #        end_time = start_time + datetime.timedelta(hours=duration)
+        events_result = self.service.events().list(calendarId='primary', timeMin=date, maxResults=10, singleEvents=True,
+                                                   orderBy='startTime').execute()
 
-   #    event = {
-   #        'summary': summary,
-   #        'location': location,
-   #        'description': description,
-   #        'start': {
-   #            'dateTime': start_time.strftime("%Y-%m-%dT%H:%M:%S"),
-   #            'timeZone': datetime.timezone,
-   #        },
-   #        'end': {
-   #            'dateTime': end_time.strftime("%Y-%m-%dT%H:%M:%S"),
-   #            'timeZone': datetime.timezone,
-   #        },
-   #        'attendees': [
-   #            {'email': attendees},
-   #        ],
-   #        'reminders': {
-   #            'useDefault': False,
-   #            'overrides': [
-   #                {'method': 'email', 'minutes': 24 * 60},
-   #                {'method': 'popup', 'minutes': 10},
-   #            ],
-   #        },
-   #    }
+        events = events_result.get('items', [])
 
-   #self.service.events().insert(calendar_id, body=event, sendNotifications=True).execute()
+        if not events:
+            return 'No upcoming events found.'
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            return {start, event['summary']}
+
+    def create_event(self, start_time_str, summary, calendar_id='primary', duration=1, unit='days', attendees=None,
+                     description=None, location=None):
+
+        interval = Utils.dateFunctions.getDateInterval(start_time_str, duration, unit)
+
+        event = {
+            'summary': summary,
+            'location': location,
+            'description': description,
+            'start': {
+                'dateTime': interval.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
+                'timeZone': datetime.timezone,
+            },
+            'end': {
+                'dateTime': interval.end_time.strftime("%Y-%m-%dT%H:%M:%S"),
+                'timeZone': datetime.timezone,
+            },
+            'attendees': [
+                {'email': attendees},
+            ],
+            'reminders': {
+                'useDefault': False,
+                'overrides': [
+                    {'method': 'email', 'minutes': 24 * 60},
+                    {'method': 'popup', 'minutes': 10},
+                ],
+            },
+        }
+
+        self.service.events().insert(calendar_id, body=event, sendNotifications=True).execute()
