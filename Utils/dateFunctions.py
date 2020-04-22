@@ -1,5 +1,6 @@
 import datefinder
 import datetime
+from datetime import datetime
 import time
 
 
@@ -44,3 +45,9 @@ def getNow():
 
 def getSystemTimeZone():
     return 'Europe/Prague'
+
+
+def formatDate(date):
+    date = datetime.strptime(getDateFromString(date), '%c %Z%z')
+    date = date.strftime("%A %d")
+    return date

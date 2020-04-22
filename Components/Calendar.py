@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from API.GoogleCalAPI import GoogleCalAPI
 from datetime import datetime
+import Utils.dateFunctions
 
 
 class Calendar(QObject):
@@ -10,18 +11,13 @@ class Calendar(QObject):
         QObject.__init__(self)
         self.googleAPI = GoogleCalAPI()
 
-    def formatDate(self, date):
-        date = datetime.strptime(date, '%c %Z%z')
-        date = date.strftime("%A %d")
-        return date
-
     printedDate = pyqtSignal(str, arguments=['printDate'])
     loadedDate = pyqtSignal(str, arguments=['loadedDate'])
     loadedCredentials = pyqtSignal(str, arguments=['loadedCredentials'])
 
     @pyqtSlot(str)
     def printDate(self, date):
-        date = self.formatDate(date)
+        date = Utils.dateFunctions.formatDate(date)
         self.printedDate.emit(date)
 
     @pyqtSlot(str)
