@@ -1,6 +1,5 @@
 import sys
-from Calendar import Calendar
-from API.GoogleCalAPI import GoogleCalAPI
+from Components.Calendar import Calendar
 from PyQt5.QtGui import QGuiApplication, QIcon
 from PyQt5.QtQml import QQmlApplicationEngine
 
@@ -10,7 +9,7 @@ app.setWindowIcon(QIcon('resources/imgs/g_call.png'))
 engine = QQmlApplicationEngine()
 calendar = Calendar()
 engine.rootContext().setContextProperty('calendarConn', calendar)
-engine.load('main.qml')
+engine.load('QML/main.qml')
 
 engine.quit.connect(app.quit)
 sys.exit(app.exec_())
