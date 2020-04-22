@@ -1,4 +1,4 @@
-from GoogleCalAPI import GoogleCalApi
+from API.GoogleCalAPI import GoogleCalApi
 
 API = GoogleCalAPI()
 

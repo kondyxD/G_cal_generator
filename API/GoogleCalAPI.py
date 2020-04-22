@@ -35,7 +35,7 @@ class GoogleCalAPI:
     def get_my_calendars_events(self, calendar_id):
         return self.service.events().list(calendarId=calendar_id, timeZone="Asia/Kolkata").execute()
 
-    def create_event(self, start_time_str, summary, calendar_id = 'primary',duration=1,attendees=None, description=None, location=None):
+    def create_event(self, start_time_str, summary, calendar_id = 'primary', duration=1, attendees=None, description=None, location=None):
         matches = list(datefinder.find_dates(start_time_str))
         if len(matches):
             start_time = matches[0]
