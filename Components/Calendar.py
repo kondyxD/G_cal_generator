@@ -24,7 +24,7 @@ class Calendar(QObject):
         date = self.formatDate(date)
         self.printedDate.emit(date)
 
-    @pyqtSlot(result=dict)
+    @pyqtSlot(str)
     def loadDate(self, text):
         today = datetime.today()
         today = today.strftime("%A %d")

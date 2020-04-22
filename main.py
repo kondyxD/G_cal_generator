@@ -14,4 +14,3 @@ engine.load('QML/main.qml')
 
 engine.quit.connect(app.quit)
 sys.exit(app.exec_())
- 
