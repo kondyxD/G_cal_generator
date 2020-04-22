@@ -74,7 +74,10 @@ ApplicationWindow{
   Connections {
       target: calendarConn
       onPrintedDate: {
-         dateText.text = printDate
+         dateText.text = "My events (" + printDate + ")"
+      }
+      onLoadDate: {
+          dateText.text = "My events (" + loadDate + ")"
       }
   }
 
