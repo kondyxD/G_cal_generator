@@ -63,22 +63,26 @@ ApplicationWindow{
               id: calendar
               width: parent.width
               height: 300
+
               onClicked: {
                 calendarConn.printDate(date)
+              }
+              Component.onCompleted: calendarConn.loadDate()
+          }
+
+          Connections {
+              target: calendarConn
+              onPrintedDate: {
+                 dateText.text = "My events (" + printDate + ")"
+              }
+
+              onLoadedDate: {
+                 dateText.text = "My events (" + loadDate + ")"
               }
           }
       }
 
   }
 
-  Connections {
-      target: calendarConn
-      onPrintedDate: {
-         dateText.text = "My events (" + printDate + ")"
-      }
-      onLoadDate: {
-          dateText.text = "My events (" + loadDate + ")"
-      }
-  }
 
 }

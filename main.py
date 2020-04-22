@@ -8,7 +8,6 @@ app.setWindowIcon(QIcon('resources/imgs/g_call.png'))
 
 engine = QQmlApplicationEngine()
 calendar = Calendar()
-
 engine.rootContext().setContextProperty('calendarConn', calendar)
 engine.load('resources/qml/main.qml')
 

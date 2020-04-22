@@ -22,8 +22,7 @@ class GoogleCalAPI():
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    'C:/Users/Fredi/PycharmProjects/UJEP-Google/G_cal_generator/Credentials/credentials.json', SCOPES)
+                flow = InstalledAppFlow.from_client_secrets_file('Credentials/credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('../token.pickle', 'wb') as token:
@@ -46,7 +45,6 @@ class GoogleCalAPI():
 
     def get_my_events(self):
         return self.service.events().list(calendarId=self.calendarId, timeZone="Europe/Prague").execute()['items'][0]
-
 
    #def create_event(self, start_time_str, summary, calendar_id='primary', duration=1, attendees=None, description=None,
    #                 location=None):
