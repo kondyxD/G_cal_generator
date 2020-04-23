@@ -24,11 +24,11 @@ class Calendar(QObject):
         date = self.formatDate(date)
         self.printedDate.emit(date)
 
-    @pyqtSlot(set)
+    @pyqtSlot(str)
     def loadDate(self, text):
         today = datetime.today()
         today = today.strftime("%A %d")
-        self.loadedDate.emit(data)
+        self.loadedDate.emit(today)
 
     @pyqtSlot(str)
     def loadCredentials(self, text):
