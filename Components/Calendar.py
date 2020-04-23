@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from API.GoogleCalAPI import GoogleCalAPI
 from datetime import datetime
-
+import json
 
 class Calendar(QObject):
     """docstring for Calendar."""
@@ -28,7 +28,6 @@ class Calendar(QObject):
     def loadDate(self, text):
         today = datetime.today()
         today = today.strftime("%A %d")
-        print(self.googleAPI.get_my_events(today))
         self.loadedDate.emit(today)
 
     @pyqtSlot(str)
